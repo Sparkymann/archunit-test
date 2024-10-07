@@ -21,11 +21,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      name: checkout arch-unit
+      with:
+        repository: Sparkymann/ArchUnit
+        ref: fix-failed-junit-tests-while-filtering
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: maven
+#        cache: maven
+    - name: build with gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        arguments: publishToMavenLocal
+    - uses: actions/checkout@v4
+      name: checkout test project
     - name: Build with Maven
       run: mvn -B package --file pom.xml
